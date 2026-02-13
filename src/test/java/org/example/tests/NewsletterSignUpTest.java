@@ -5,6 +5,7 @@ import java.time.Duration;
 import org.example.config.TestConfig;
 import org.example.driver.DriverFactory;
 import org.example.pages.NewsletterPage;
+import org.example.pages.SuccessPage;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,17 @@ class NewsletterSignUpTest {
      * Verifies that a user can successfully subscribe to the newsletter with a valid email address.
      * Expected: Success message is displayed containing "thanks" and the submitted email address.
      */
-
+    @Test
+    void userCanSubscribeWithValidEmail() {
+        String testEmail = "qa+selenium@example.com";
+        
+        newsletterPage.subscribeWithEmail(testEmail);
+        SuccessPage successPage = newsletterPage.waitForSuccess();
+        
+        String pageText = successPage.getHeadingText().toLowerCase();
+        assertTrue(pageText.contains("thanks"), "Success message should contain 'thanks'");
+        assertTrue(pageText.contains(testEmail.toLowerCase()), "Success message should display the email: " + testEmail);
+    }
 
     /**
      * Test Case: Empty Email Validation
