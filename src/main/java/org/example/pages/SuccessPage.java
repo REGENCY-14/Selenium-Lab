@@ -3,12 +3,13 @@ package org.example.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SuccessPage extends BasePage {
 
-    @FindBy(css = "h1")
-    private WebElement heading;
+    @FindBy(tagName = "body")
+    private WebElement body;
 
     @FindBy(css = "button")
     private WebElement dismissButton;
@@ -18,12 +19,12 @@ public class SuccessPage extends BasePage {
     }
 
     public SuccessPage waitUntilLoaded() {
-        waitUntilVisible(heading);
+        wait.until(ExpectedConditions.textToBePresentInElement(body, "Thanks"));
         return this;
     }
 
     public String getHeadingText() {
-        return heading.getText();
+        return body.getText();
     }
 
     public void dismiss() {
