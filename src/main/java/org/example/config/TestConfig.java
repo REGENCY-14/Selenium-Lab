@@ -13,7 +13,7 @@ public class TestConfig {
 
     public static TestConfig fromSystemProperties() {
         String baseUrl = System.getProperty("baseUrl", "https://super-florentine-1aef16.netlify.app/");
-        boolean headless = Boolean.parseBoolean(System.getProperty("headless", "true"));
+        boolean headless = Boolean.parseBoolean(System.getProperty("headless", "false"));
         long timeoutSeconds = Long.parseLong(System.getProperty("timeoutSeconds", "10"));
         return new TestConfig(baseUrl, headless, timeoutSeconds);
     }
