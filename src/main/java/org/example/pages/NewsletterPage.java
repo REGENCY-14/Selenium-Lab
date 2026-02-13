@@ -13,20 +13,48 @@ public class NewsletterPage extends BasePage {
     @FindBy(css = "button[type='submit']")
     private WebElement subscribeButton;
 
+    @FindBy(css = "label[for='email']")
+    private WebElement validationMessage;
+
     public NewsletterPage(WebDriver driver, WebDriverWait wait) {
         super(driver, wait);
     }
 
-    public void subscribeWithEmail(String email) {
+    public void enterEmail(String email) {
         waitUntilVisible(emailInput);
         emailInput.clear();
         emailInput.sendKeys(email);
+    }
+
+    public void clickSubscribe() {
         subscribeButton.click();
+    }
+
+    public void subscribeWithEmail(String email) {
+        enterEmail(email);
+        clickSubscribe();
     }
 
     public SuccessPage waitForSuccess() {
         SuccessPage successPage = new SuccessPage(driver, wait);
         successPage.waitUntilLoaded();
         return successPage;
+    }
+
+    public boolean isValidationMessageDisplayed() {
+        try {
+            return validationMessage.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getValidationMessage() {
+        waitUntilVisible(validationMessage);
+        return validationMessage.getText();
+    }
+
+    public String getEmailInputValidationMessage() {
+        return emailInput.getAttribute("validationMessage");
     }
 }
