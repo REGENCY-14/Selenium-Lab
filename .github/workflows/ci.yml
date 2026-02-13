@@ -37,21 +37,3 @@ jobs:
           fields: repo,commit,author,workflow,job,ref,elapsed
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-      - name: Email notification
-        if: always()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.SMTP_HOST }}
-          server_port: ${{ secrets.SMTP_PORT }}
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "CI ${{ job.status }} - ${{ github.repository }}"
-          to: ${{ secrets.SMTP_TO }}
-          from: ${{ secrets.SMTP_FROM }}
-          body: |
-            Workflow: ${{ github.workflow }}
-            Job: ${{ github.job }}
-            Status: ${{ job.status }}
-            Commit: ${{ github.sha }}
-            Ref: ${{ github.ref }}
