@@ -22,7 +22,7 @@ jobs:
           cache: "maven"
 
       - name: Run tests
-        run: mvn -B -e -DtrimStackTrace=false test
+        run: mvn -B -e -DtrimStackTrace=false test -Dheadless=true
 
       - name: Slack notification
         if: ${{ always() && secrets.SLACK_WEBHOOK_URL != '' }}
