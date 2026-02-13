@@ -38,3 +38,24 @@ jobs:
           fields: repo,commit,author,workflow,job,ref,elapsed
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Email notification on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "CI FAILED - ${{ github.repository }}"
+          to: ${{ secrets.SMTP_TO }}
+          from: ${{ secrets.SMTP_USERNAME }}
+          body: |
+            CI Pipeline FAILED!
+            
+            Repository: ${{ github.repository }}
+            Workflow: ${{ github.workflow }}
+            Commit: ${{ github.sha }}
+            Branch: ${{ github.ref }}
+            
+            Check the full logs at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
