@@ -22,12 +22,16 @@ public class NewsletterPage extends BasePage {
 
     public void enterEmail(String email) {
         waitUntilVisible(emailInput);
+        sleep();
         emailInput.clear();
         emailInput.sendKeys(email);
+        sleep();
     }
 
     public void clickSubscribe() {
+        sleep();
         subscribeButton.click();
+        sleep();
     }
 
     public void subscribeWithEmail(String email) {
