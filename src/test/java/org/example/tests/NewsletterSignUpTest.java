@@ -27,6 +27,7 @@ class NewsletterSignUpTest {
         driver = new DriverFactory().createChromeDriver(config);
         wait = new WebDriverWait(driver, Duration.ofSeconds(config.getTimeoutSeconds()));
         newsletterPage = new NewsletterPage(driver, wait);
+        newsletterPage.setDelayMillis(config.getDelayMillis());
         newsletterPage.open(config.getBaseUrl());
     }
 
