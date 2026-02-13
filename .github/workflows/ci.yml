@@ -49,7 +49,7 @@ jobs:
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "CI ${{ job.status }} - ${{ github.repository }}"
           to: ${{ secrets.SMTP_TO }}
-          from: ${{ secrets.SMTP_USERNAME }}
+          from: "Selenium Lab CI <${{ secrets.SMTP_USERNAME }}>"
           body: |
             CI Pipeline ${{ job.status }}!
             
