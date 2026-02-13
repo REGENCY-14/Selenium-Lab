@@ -76,7 +76,7 @@ class NewsletterSignUpTest {
      */
     @Test
     void userSeesValidationMessageForInvalidEmailFormat() {
-        newsletterPage.enterEmail("invalid-email");
+        newsletterPage.enterEmail("123456789");
         newsletterPage.clickSubscribe();
         
         // HTML5 validation prevents form submission
