@@ -51,7 +51,7 @@ jobs:
           to: ${{ secrets.SMTP_TO }}
           from: ${{ secrets.SMTP_USERNAME }}
           body: |
-            CI Pipeline ${{ job.status | upper }}!
+            CI Pipeline ${{ job.status }}!
             
             Repository: ${{ github.repository }}
             Workflow: ${{ github.workflow }}
