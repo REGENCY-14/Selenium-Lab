@@ -25,7 +25,7 @@ jobs:
         run: mvn -B -e -DtrimStackTrace=false test -Dheadless=true
 
       - name: Slack notification
-        if: ${{ always() && secrets.SLACK_WEBHOOK_URL != '' }}
+        if: always()
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
@@ -34,7 +34,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Email notification
-        if: ${{ always() && secrets.SMTP_HOST != '' }}
+        if: always()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_HOST }}
