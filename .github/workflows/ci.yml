@@ -50,7 +50,7 @@ jobs:
         run: exit 1
 
       - name: Slack notification on success
-        if: success() && env.SLACK_WEBHOOK_URL != ''
+        if: success() && env.SLACK_WEBHOOK_URL != '' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository))
         continue-on-error: true
         uses: slackapi/slack-github-action@v1.27.0
         with:
@@ -62,7 +62,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Slack notification on failure
-        if: always() && failure() && env.SLACK_WEBHOOK_URL != ''
+        if: always() && failure() && env.SLACK_WEBHOOK_URL != '' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository))
         continue-on-error: true
         uses: slackapi/slack-github-action@v1.27.0
         with:
@@ -74,7 +74,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Email notification on success
-        if: success() && env.SMTP_TO != ''
+        if: success() && env.SMTP_TO != '' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository))
         continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
@@ -94,7 +94,7 @@ jobs:
             Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: Email notification on failure
-        if: always() && failure() && env.SMTP_TO != ''
+        if: always() && failure() && env.SMTP_TO != '' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository))
         continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
