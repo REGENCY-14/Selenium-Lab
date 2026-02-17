@@ -28,6 +28,7 @@ jobs:
           cache: "maven"
 
       - name: Run tests
+        id: test_step
         continue-on-error: true
         env:
           MAVEN_OPTS: "-Xmx1g"
@@ -35,13 +36,14 @@ jobs:
 
       - name: Upload Surefire reports
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: surefire-reports
           path: target/surefire-reports
 
       - name: Slack notification on success
-        if: success()
+        if: steps.test_step.outcome == 'success'
         uses: slackapi/slack-github-action@v1.27.0
         with:
           payload: |
@@ -52,7 +54,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Slack notification on failure
-        if: failure()
+        if: steps.test_step.outcome == 'failure'
         uses: slackapi/slack-github-action@v1.27.0
         with:
           payload: |
@@ -63,7 +65,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Email notification on success
-        if: success()
+        if: steps.test_step.outcome == 'success'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
@@ -79,7 +81,7 @@ jobs:
             Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: Email notification on failure
-        if: failure()
+        if: steps.test_step.outcome == 'failure'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
