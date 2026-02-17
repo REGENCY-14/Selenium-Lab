@@ -105,7 +105,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "✅ CI Success\nRepository: ${{ github.repository }}\nRepository URL: ${{ github.server_url }}/${{ github.repository }}\nPull Request Title: ${{ github.event.pull_request.title || 'N/A' }}\nPull Request Number: ${{ github.event.pull_request.number || 'N/A' }}\nPull Request URL: ${{ github.event.pull_request.html_url || 'N/A' }}\nAuthor: ${{ github.event.pull_request.user.login || github.actor }}\nSource Branch: ${{ github.head_ref || github.ref_name }}\nTarget Branch: ${{ github.base_ref || github.ref_name }}\nCommit Message: ${{ steps.test_meta.outputs.commit_message }}\nCommit SHA: ${{ steps.test_meta.outputs.commit_sha }}\nCommit Author: ${{ steps.test_meta.outputs.commit_author }}\nTests Passed: ${{ steps.test_meta.outputs.tests_passed }}\nTests Failed: ${{ steps.test_meta.outputs.tests_failed }}\nOverall Test Status: ${{ steps.test_meta.outputs.tests_status }}\nWorkflow Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nTimestamp: ${{ steps.test_meta.outputs.timestamp }}"
+              "text": "✅ CI Success\nRepository: ${{ github.repository }}\nRepository URL: ${{ github.server_url }}/${{ github.repository }}\nAuthor: ${{ github.event.pull_request.user.login || github.actor }}\nSource Branch: ${{ github.head_ref || github.ref_name }}\nTarget Branch: ${{ github.base_ref || github.ref_name }}\nCommit Message: ${{ steps.test_meta.outputs.commit_message }}\nCommit SHA: ${{ steps.test_meta.outputs.commit_sha }}\nCommit Author: ${{ steps.test_meta.outputs.commit_author }}\nTests Passed: ${{ steps.test_meta.outputs.tests_passed }}\nTests Failed: ${{ steps.test_meta.outputs.tests_failed }}\nOverall Test Status: ${{ steps.test_meta.outputs.tests_status }}\nWorkflow Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nTimestamp: ${{ steps.test_meta.outputs.timestamp }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -117,7 +117,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "❌ CI Failed\nRepository: ${{ github.repository }}\nRepository URL: ${{ github.server_url }}/${{ github.repository }}\nPull Request Title: ${{ github.event.pull_request.title || 'N/A' }}\nPull Request Number: ${{ github.event.pull_request.number || 'N/A' }}\nPull Request URL: ${{ github.event.pull_request.html_url || 'N/A' }}\nAuthor: ${{ github.event.pull_request.user.login || github.actor }}\nSource Branch: ${{ github.head_ref || github.ref_name }}\nTarget Branch: ${{ github.base_ref || github.ref_name }}\nCommit Message: ${{ steps.test_meta.outputs.commit_message }}\nCommit SHA: ${{ steps.test_meta.outputs.commit_sha }}\nCommit Author: ${{ steps.test_meta.outputs.commit_author }}\nTests Passed: ${{ steps.test_meta.outputs.tests_passed }}\nTests Failed: ${{ steps.test_meta.outputs.tests_failed }}\nOverall Test Status: ${{ steps.test_meta.outputs.tests_status }}\nWorkflow Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nTimestamp: ${{ steps.test_meta.outputs.timestamp }}"
+              "text": "❌ CI Failed\nRepository: ${{ github.repository }}\nRepository URL: ${{ github.server_url }}/${{ github.repository }}\nAuthor: ${{ github.event.pull_request.user.login || github.actor }}\nSource Branch: ${{ github.head_ref || github.ref_name }}\nTarget Branch: ${{ github.base_ref || github.ref_name }}\nCommit Message: ${{ steps.test_meta.outputs.commit_message }}\nCommit SHA: ${{ steps.test_meta.outputs.commit_sha }}\nCommit Author: ${{ steps.test_meta.outputs.commit_author }}\nTests Passed: ${{ steps.test_meta.outputs.tests_passed }}\nTests Failed: ${{ steps.test_meta.outputs.tests_failed }}\nOverall Test Status: ${{ steps.test_meta.outputs.tests_status }}\nWorkflow Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nTimestamp: ${{ steps.test_meta.outputs.timestamp }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -140,12 +140,6 @@ jobs:
             Repository Details
             - Repository name: ${{ github.repository }}
             - Repository URL: ${{ github.server_url }}/${{ github.repository }}
-
-            Pull Request Details
-            - Pull Request title: ${{ github.event.pull_request.title || 'N/A' }}
-            - Pull Request number: ${{ github.event.pull_request.number || 'N/A' }}
-            - Pull Request URL: ${{ github.event.pull_request.html_url || 'N/A' }}
-            - Author name: ${{ github.event.pull_request.user.login || github.actor }}
 
             Branch Details
             - Source branch name: ${{ github.head_ref || github.ref_name }}
@@ -183,12 +177,6 @@ jobs:
             Repository Details
             - Repository name: ${{ github.repository }}
             - Repository URL: ${{ github.server_url }}/${{ github.repository }}
-
-            Pull Request Details
-            - Pull Request title: ${{ github.event.pull_request.title || 'N/A' }}
-            - Pull Request number: ${{ github.event.pull_request.number || 'N/A' }}
-            - Pull Request URL: ${{ github.event.pull_request.html_url || 'N/A' }}
-            - Author name: ${{ github.event.pull_request.user.login || github.actor }}
 
             Branch Details
             - Source branch name: ${{ github.head_ref || github.ref_name }}
