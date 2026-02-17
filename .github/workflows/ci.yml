@@ -78,12 +78,15 @@ jobs:
           server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "✅ CI Success: ${{ github.repository }}"
+          subject: "✅ CI Success #${{ github.run_number }}.${{ github.run_attempt }}: ${{ github.repository }}"
           to: ${{ secrets.SMTP_TO }}
           from: selenium-lab-ci@github.com
           body: |
             CI Success for ${{ github.repository }} on ${{ github.ref_name }}.
             Actor: ${{ github.actor }}
+            Run number: ${{ github.run_number }} (attempt ${{ github.run_attempt }})
+            Commit: ${{ github.sha }}
+            Started at: ${{ github.run_started_at }}
             Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: Email notification on failure
@@ -95,12 +98,15 @@ jobs:
           server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "❌ CI Failed: ${{ github.repository }}"
+          subject: "❌ CI Failed #${{ github.run_number }}.${{ github.run_attempt }}: ${{ github.repository }}"
           to: ${{ secrets.SMTP_TO }}
           from: selenium-lab-ci@github.com
           body: |
             CI Failed for ${{ github.repository }} on ${{ github.ref_name }}.
             Actor: ${{ github.actor }}
+            Run number: ${{ github.run_number }} (attempt ${{ github.run_attempt }})
+            Commit: ${{ github.sha }}
+            Started at: ${{ github.run_started_at }}
             Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: Fail job if tests failed
