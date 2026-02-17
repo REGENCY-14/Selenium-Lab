@@ -39,13 +39,24 @@ jobs:
           name: surefire-reports
           path: target/surefire-reports
 
-      - name: Slack notification
-        if: always()
+      - name: Slack notification on success
+        if: success()
         uses: slackapi/slack-github-action@v1.27.0
         with:
           payload: |
             {
-              "text": "CI ${{ job.status }} for *${{ github.repository }}* on *${{ github.ref_name }}* by *${{ github.actor }}*.\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              "text": "✅ CI Success for *${{ github.repository }}* on *${{ github.ref_name }}* by *${{ github.actor }}*.\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Slack notification on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "text": "❌ CI Failed for *${{ github.repository }}* on *${{ github.ref_name }}* by *${{ github.actor }}*.\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
