@@ -10,6 +10,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      SMTP_TO: ${{ secrets.SMTP_TO }}
 
     steps:
       - name: Checkout
@@ -43,7 +46,7 @@ jobs:
           path: target/surefire-reports
 
       - name: Slack notification on success
-        if: steps.test_step.outcome == 'success' && secrets.SLACK_WEBHOOK_URL != ''
+        if: steps.test_step.outcome == 'success' && env.SLACK_WEBHOOK_URL != ''
         continue-on-error: true
         uses: slackapi/slack-github-action@v1.27.0
         with:
@@ -55,7 +58,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Slack notification on failure
-        if: steps.test_step.outcome == 'failure' && secrets.SLACK_WEBHOOK_URL != ''
+        if: steps.test_step.outcome == 'failure' && env.SLACK_WEBHOOK_URL != ''
         continue-on-error: true
         uses: slackapi/slack-github-action@v1.27.0
         with:
@@ -67,7 +70,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Email notification on success
-        if: steps.test_step.outcome == 'success' && secrets.SMTP_TO != ''
+        if: steps.test_step.outcome == 'success' && env.SMTP_TO != ''
         continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
@@ -84,7 +87,7 @@ jobs:
             Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: Email notification on failure
-        if: steps.test_step.outcome == 'failure' && secrets.SMTP_TO != ''
+        if: steps.test_step.outcome == 'failure' && env.SMTP_TO != ''
         continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
