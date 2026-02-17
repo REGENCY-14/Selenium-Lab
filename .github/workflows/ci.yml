@@ -43,7 +43,8 @@ jobs:
           path: target/surefire-reports
 
       - name: Slack notification on success
-        if: steps.test_step.outcome == 'success'
+        if: steps.test_step.outcome == 'success' && secrets.SLACK_WEBHOOK_URL != ''
+        continue-on-error: true
         uses: slackapi/slack-github-action@v1.27.0
         with:
           payload: |
@@ -54,7 +55,8 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Slack notification on failure
-        if: steps.test_step.outcome == 'failure'
+        if: steps.test_step.outcome == 'failure' && secrets.SLACK_WEBHOOK_URL != ''
+        continue-on-error: true
         uses: slackapi/slack-github-action@v1.27.0
         with:
           payload: |
@@ -65,7 +67,8 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Email notification on success
-        if: steps.test_step.outcome == 'success'
+        if: steps.test_step.outcome == 'success' && secrets.SMTP_TO != ''
+        continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
@@ -81,7 +84,8 @@ jobs:
             Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: Email notification on failure
-        if: steps.test_step.outcome == 'failure'
+        if: steps.test_step.outcome == 'failure' && secrets.SMTP_TO != ''
+        continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
@@ -95,3 +99,7 @@ jobs:
             CI Failed for ${{ github.repository }} on ${{ github.ref_name }}.
             Actor: ${{ github.actor }}
             Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: Fail job if tests failed
+        if: steps.test_step.outcome == 'failure'
+        run: exit 1
