@@ -60,7 +60,7 @@ jobs:
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "CI ${{ job.status }}: ${{ github.repository }}"
           to: ${{ secrets.SMTP_TO }}
-          from: ${{ secrets.SMTP_FROM }}
+          from: ${{ secrets.SMTP_USERNAME }}
           body: |
             CI ${{ job.status }} for ${{ github.repository }} on ${{ github.ref_name }}.
             Actor: ${{ github.actor }}
