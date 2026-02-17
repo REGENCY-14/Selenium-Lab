@@ -45,6 +45,55 @@ jobs:
           name: surefire-reports
           path: target/surefire-reports
 
+      - name: Collect test metadata
+        id: test_meta
+        if: always()
+        continue-on-error: true
+        env:
+          TEST_OUTCOME: ${{ steps.test_step.outcome }}
+        run: |
+          python - <<'PY'
+          import datetime
+          import glob
+          import os
+          import subprocess
+          import xml.etree.ElementTree as ET
+
+          def git(*args):
+              return subprocess.check_output(["git", *args]).decode().strip()
+
+          total = failures = errors = skipped = 0
+          for path in glob.glob("target/surefire-reports/*.xml"):
+              try:
+                  root = ET.parse(path).getroot()
+                  total += int(root.attrib.get("tests", 0))
+                  failures += int(root.attrib.get("failures", 0))
+                  errors += int(root.attrib.get("errors", 0))
+                  skipped += int(root.attrib.get("skipped", 0))
+              except Exception:
+                  continue
+
+          failed = failures + errors
+          passed = max(total - failed - skipped, 0)
+          outcome = os.environ.get("TEST_OUTCOME", "")
+          status = "PASSED" if outcome == "success" else "FAILED" if outcome == "failure" else "UNKNOWN"
+          timestamp = datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+
+          commit_sha = git("rev-parse", "HEAD")
+          commit_author = git("log", "-1", "--pretty=%an")
+          commit_message = git("log", "-1", "--pretty=%s")
+
+          out_path = os.environ.get("GITHUB_OUTPUT")
+          with open(out_path, "a", encoding="utf-8") as f:
+              f.write(f"tests_passed={passed}\n")
+              f.write(f"tests_failed={failed}\n")
+              f.write(f"tests_status={status}\n")
+              f.write(f"timestamp={timestamp}\n")
+              f.write(f"commit_sha={commit_sha}\n")
+              f.write(f"commit_author={commit_author}\n")
+              f.write(f"commit_message={commit_message}\n")
+          PY
+
       - name: Fail job if tests failed
         if: steps.test_step.outcome == 'failure'
         run: exit 1
@@ -56,7 +105,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "✅ CI Success for *${{ github.repository }}* on *${{ github.ref_name }}* by *${{ github.actor }}*.\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              "text": "✅ CI Success\nRepository: ${{ github.repository }}\nRepository URL: ${{ github.server_url }}/${{ github.repository }}\nPull Request Title: ${{ github.event.pull_request.title || 'N/A' }}\nPull Request Number: ${{ github.event.pull_request.number || 'N/A' }}\nPull Request URL: ${{ github.event.pull_request.html_url || 'N/A' }}\nAuthor: ${{ github.event.pull_request.user.login || github.actor }}\nSource Branch: ${{ github.head_ref || github.ref_name }}\nTarget Branch: ${{ github.base_ref || github.ref_name }}\nCommit Message: ${{ steps.test_meta.outputs.commit_message }}\nCommit SHA: ${{ steps.test_meta.outputs.commit_sha }}\nCommit Author: ${{ steps.test_meta.outputs.commit_author }}\nTests Passed: ${{ steps.test_meta.outputs.tests_passed }}\nTests Failed: ${{ steps.test_meta.outputs.tests_failed }}\nOverall Test Status: ${{ steps.test_meta.outputs.tests_status }}\nWorkflow Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nTimestamp: ${{ steps.test_meta.outputs.timestamp }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -68,7 +117,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "❌ CI Failed for *${{ github.repository }}* on *${{ github.ref_name }}* by *${{ github.actor }}*.\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              "text": "❌ CI Failed\nRepository: ${{ github.repository }}\nRepository URL: ${{ github.server_url }}/${{ github.repository }}\nPull Request Title: ${{ github.event.pull_request.title || 'N/A' }}\nPull Request Number: ${{ github.event.pull_request.number || 'N/A' }}\nPull Request URL: ${{ github.event.pull_request.html_url || 'N/A' }}\nAuthor: ${{ github.event.pull_request.user.login || github.actor }}\nSource Branch: ${{ github.head_ref || github.ref_name }}\nTarget Branch: ${{ github.base_ref || github.ref_name }}\nCommit Message: ${{ steps.test_meta.outputs.commit_message }}\nCommit SHA: ${{ steps.test_meta.outputs.commit_sha }}\nCommit Author: ${{ steps.test_meta.outputs.commit_author }}\nTests Passed: ${{ steps.test_meta.outputs.tests_passed }}\nTests Failed: ${{ steps.test_meta.outputs.tests_failed }}\nOverall Test Status: ${{ steps.test_meta.outputs.tests_status }}\nWorkflow Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nTimestamp: ${{ steps.test_meta.outputs.timestamp }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -86,12 +135,35 @@ jobs:
           to: ${{ secrets.SMTP_TO }}
           from: selenium-lab-ci@github.com
           body: |
-            CI Success for ${{ github.repository }} on ${{ github.ref_name }}.
-            Actor: ${{ github.actor }}
-            Run number: ${{ github.run_number }} (attempt ${{ github.run_attempt }})
-            Commit: ${{ github.sha }}
-            Started at: ${{ github.run_started_at }}
-            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            CI Success
+
+            Repository Details
+            - Repository name: ${{ github.repository }}
+            - Repository URL: ${{ github.server_url }}/${{ github.repository }}
+
+            Pull Request Details
+            - Pull Request title: ${{ github.event.pull_request.title || 'N/A' }}
+            - Pull Request number: ${{ github.event.pull_request.number || 'N/A' }}
+            - Pull Request URL: ${{ github.event.pull_request.html_url || 'N/A' }}
+            - Author name: ${{ github.event.pull_request.user.login || github.actor }}
+
+            Branch Details
+            - Source branch name: ${{ github.head_ref || github.ref_name }}
+            - Target branch name: ${{ github.base_ref || github.ref_name }}
+
+            Commit Details
+            - Latest commit message: ${{ steps.test_meta.outputs.commit_message }}
+            - Commit SHA: ${{ steps.test_meta.outputs.commit_sha }}
+            - Commit author: ${{ steps.test_meta.outputs.commit_author }}
+
+            Test Results
+            - Number of tests passed: ${{ steps.test_meta.outputs.tests_passed }}
+            - Number of tests failed: ${{ steps.test_meta.outputs.tests_failed }}
+            - Overall test status: ${{ steps.test_meta.outputs.tests_status }}
+
+            Additional Information
+            - Workflow run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            - Timestamp: ${{ steps.test_meta.outputs.timestamp }}
 
       - name: Email notification on failure
         if: always() && failure() && env.SMTP_TO != '' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository))
@@ -106,10 +178,33 @@ jobs:
           to: ${{ secrets.SMTP_TO }}
           from: selenium-lab-ci@github.com
           body: |
-            CI Failed for ${{ github.repository }} on ${{ github.ref_name }}.
-            Actor: ${{ github.actor }}
-            Run number: ${{ github.run_number }} (attempt ${{ github.run_attempt }})
-            Commit: ${{ github.sha }}
-            Started at: ${{ github.run_started_at }}
-            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            CI Failed
+
+            Repository Details
+            - Repository name: ${{ github.repository }}
+            - Repository URL: ${{ github.server_url }}/${{ github.repository }}
+
+            Pull Request Details
+            - Pull Request title: ${{ github.event.pull_request.title || 'N/A' }}
+            - Pull Request number: ${{ github.event.pull_request.number || 'N/A' }}
+            - Pull Request URL: ${{ github.event.pull_request.html_url || 'N/A' }}
+            - Author name: ${{ github.event.pull_request.user.login || github.actor }}
+
+            Branch Details
+            - Source branch name: ${{ github.head_ref || github.ref_name }}
+            - Target branch name: ${{ github.base_ref || github.ref_name }}
+
+            Commit Details
+            - Latest commit message: ${{ steps.test_meta.outputs.commit_message }}
+            - Commit SHA: ${{ steps.test_meta.outputs.commit_sha }}
+            - Commit author: ${{ steps.test_meta.outputs.commit_author }}
+
+            Test Results
+            - Number of tests passed: ${{ steps.test_meta.outputs.tests_passed }}
+            - Number of tests failed: ${{ steps.test_meta.outputs.tests_failed }}
+            - Overall test status: ${{ steps.test_meta.outputs.tests_status }}
+
+            Additional Information
+            - Workflow run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            - Timestamp: ${{ steps.test_meta.outputs.timestamp }}
 
