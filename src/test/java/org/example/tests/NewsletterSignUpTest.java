@@ -44,14 +44,22 @@ class NewsletterSignUpTest {
      */
     @Test
     void userCanSubscribeWithValidEmail() {
+        System.out.println("[TEST] Valid Email Subscription Test");
         String testEmail = "qa+selenium@example.com";
         
-        newsletterPage.subscribeWithEmail(testEmail);
-        SuccessPage successPage = newsletterPage.waitForSuccess();
-        
-        String pageText = successPage.getHeadingText().toLowerCase();
-        assertTrue(pageText.contains("thanks"), "Success message should contain 'thanks'");
-        assertTrue(pageText.contains(testEmail.toLowerCase()), "Success message should display the email: " + testEmail);
+        try {
+            newsletterPage.subscribeWithEmail(testEmail);
+            SuccessPage successPage = newsletterPage.waitForSuccess();
+            String pageText = successPage.getHeadingText().toLowerCase();
+            
+            assertTrue(pageText.contains("thanks"), "Success message should contain 'thanks'");
+            assertTrue(pageText.contains(testEmail.toLowerCase()), "Success message should display the email: " + testEmail);
+            
+            System.out.println("✅ PASSED\n");
+        } catch (AssertionError | Exception e) {
+            System.out.println("❌ FAILED: " + e.getMessage() + "\n");
+            throw e;
+        }
     }
 
     /**
@@ -61,12 +69,22 @@ class NewsletterSignUpTest {
      */
     @Test
     void userSeesValidationMessageForEmptyEmail() {
-        newsletterPage.clickSubscribe();
+        System.out.println("[TEST] Empty Email Validation Test");
         
-        // HTML5 validation prevents form submission
-        assertTrue(newsletterPage.isValidationMessageDisplayed() || 
-                   !newsletterPage.getEmailInputValidationMessage().isEmpty(),
-                   "Validation message should be displayed for empty email");
+        try {
+            newsletterPage.clickSubscribe();
+            boolean messageDisplayed = newsletterPage.isValidationMessageDisplayed();
+            String message = newsletterPage.getEmailInputValidationMessage();
+            
+            // HTML5 validation prevents form submission
+            assertTrue(messageDisplayed || !message.isEmpty(),
+                       "Validation message should be displayed for empty email");
+            
+            System.out.println("✅ PASSED\n");
+        } catch (AssertionError | Exception e) {
+            System.out.println("❌ FAILED: " + e.getMessage() + "\n");
+            throw e;
+        }
     }
 
     /**
@@ -76,13 +94,23 @@ class NewsletterSignUpTest {
      */
     @Test
     void userSeesValidationMessageForInvalidEmailFormat() {
-        newsletterPage.enterEmail("123456789");
-        newsletterPage.clickSubscribe();
+        System.out.println("[TEST] Invalid Email Format Validation Test");
         
-        // HTML5 validation prevents form submission
-        assertTrue(newsletterPage.isValidationMessageDisplayed() || 
-                   !newsletterPage.getEmailInputValidationMessage().isEmpty(),
-                   "Validation message should be displayed for invalid email format");
+        try {
+            newsletterPage.enterEmail("123456789");
+            newsletterPage.clickSubscribe();
+            boolean messageDisplayed = newsletterPage.isValidationMessageDisplayed();
+            String message = newsletterPage.getEmailInputValidationMessage();
+            
+            // HTML5 validation prevents form submission
+            assertTrue(messageDisplayed || !message.isEmpty(),
+                       "Validation message should be displayed for invalid email format");
+            
+            System.out.println("✅ PASSED\n");
+        } catch (AssertionError | Exception e) {
+            System.out.println("❌ FAILED: " + e.getMessage() + "\n");
+            throw e;
+        }
     }
 
     /**
@@ -92,13 +120,23 @@ class NewsletterSignUpTest {
      */
     @Test
     void userSeesValidationMessageForIncompleteEmail() {
-        newsletterPage.enterEmail("test@");
-        newsletterPage.clickSubscribe();
+        System.out.println("[TEST] Incomplete Email Validation Test");
         
-        // HTML5 validation prevents form submission
-        assertTrue(newsletterPage.isValidationMessageDisplayed() || 
-                   !newsletterPage.getEmailInputValidationMessage().isEmpty(),
-                   "Validation message should be displayed for incomplete email");
+        try {
+            newsletterPage.enterEmail("test@");
+            newsletterPage.clickSubscribe();
+            boolean messageDisplayed = newsletterPage.isValidationMessageDisplayed();
+            String message = newsletterPage.getEmailInputValidationMessage();
+            
+            // HTML5 validation prevents form submission
+            assertTrue(messageDisplayed || !message.isEmpty(),
+                       "Validation message should be displayed for incomplete email");
+            
+            System.out.println("✅ PASSED\n");
+        } catch (AssertionError | Exception e) {
+            System.out.println("❌ FAILED: " + e.getMessage() + "\n");
+            throw e;
+        }
     }
 
     /**
@@ -108,12 +146,22 @@ class NewsletterSignUpTest {
      */
     @Test
     void userSeesValidationMessageForEmailWithoutDomain() {
-        newsletterPage.enterEmail("test@domain");
-        newsletterPage.clickSubscribe();
+        System.out.println("[TEST] Email Without Domain Validation Test");
         
-        // HTML5 validation prevents form submission
-        assertTrue(newsletterPage.isValidationMessageDisplayed() || 
-                   !newsletterPage.getEmailInputValidationMessage().isEmpty(),
-                   "Validation message should be displayed for email without proper domain");
+        try {
+            newsletterPage.enterEmail("test@domain");
+            newsletterPage.clickSubscribe();
+            boolean messageDisplayed = newsletterPage.isValidationMessageDisplayed();
+            String message = newsletterPage.getEmailInputValidationMessage();
+            
+            // HTML5 validation prevents form submission
+            assertTrue(messageDisplayed || !message.isEmpty(),
+                       "Validation message should be displayed for email without proper domain");
+            
+            System.out.println("✅ PASSED\n");
+        } catch (AssertionError | Exception e) {
+            System.out.println("❌ FAILED: " + e.getMessage() + "\n");
+            throw e;
+        }
     }
 }
