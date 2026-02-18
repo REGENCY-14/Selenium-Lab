@@ -4,7 +4,7 @@ A comprehensive web automation testing project using **Selenium WebDriver**, **J
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Project Overview](#project-overview)
 - [Technologies Used](#technologies-used)
@@ -23,14 +23,14 @@ A comprehensive web automation testing project using **Selenium WebDriver**, **J
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 This project automates testing of a **newsletter subscription feature** on a web application. It verifies:
 
-✅ Valid email subscription success  
-✅ Email field validation (empty, invalid format, incomplete)  
-✅ Success page confirmation  
-✅ Error message display for invalid inputs  
+ Valid email subscription success  
+ Email field validation (empty, invalid format, incomplete)  
+ Success page confirmation  
+ Error message display for invalid inputs  
 
 **Target Website:** [https://super-florentine-1aef16.netlify.app/](https://super-florentine-1aef16.netlify.app/)
 
@@ -44,7 +44,7 @@ This project automates testing of a **newsletter subscription feature** on a web
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 ### Core Technologies
 
@@ -76,7 +76,7 @@ This project automates testing of a **newsletter subscription feature** on a web
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 Introductiontoselenium/
@@ -113,7 +113,7 @@ Introductiontoselenium/
 
 ---
 
-## ✅ Prerequisites
+##  Prerequisites
 
 Before setting up the project, ensure you have:
 
@@ -180,7 +180,7 @@ Expected output:
 
 ---
 
-## 🧪 Running Tests
+## Running Tests
 
 ### Run All Tests Locally
 
@@ -247,7 +247,7 @@ Right-click project → Run "org.example.tests.NewsletterSignUpTest"
 
 ---
 
-## 📊 Test Cases
+## Test Cases
 
 ### Test Suite: NewsletterSignUpTest
 
@@ -255,7 +255,7 @@ Located in: `src/test/java/org/example/tests/NewsletterSignUpTest.java`
 
 ---
 
-#### **Test 1: Valid Email Subscription** ✅
+#### **Test 1: Valid Email Subscription** 
 
 ```java
 @Test
@@ -277,11 +277,11 @@ void userCanSubscribeWithValidEmail() {
 4. Wait for success page
 5. Verify success message contains "thanks" and email
 
-**Expected Result:** ✅ PASS
+**Expected Result:** PASS
 
 ---
 
-#### **Test 2: Empty Email Validation** ✅
+#### **Test 2: Empty Email Validation** 
 
 ```java
 @Test
@@ -299,11 +299,11 @@ void userSeesValidationMessageForEmptyEmail() {
 2. Click subscribe WITHOUT entering email
 3. Verify validation error message appears
 
-**Expected Result:** ✅ HTML5 validation prevents form submission
+**Expected Result:**  HTML5 validation prevents form submission
 
 ---
 
-#### **Test 3: Invalid Email Format Validation** ✅
+#### **Test 3: Invalid Email Format Validation** 
 
 ```java
 @Test
@@ -323,11 +323,11 @@ void userSeesValidationMessageForInvalidEmailFormat() {
 3. Click subscribe
 4. Verify validation error appears
 
-**Expected Result:** ✅ Validation error displayed
+**Expected Result:** Validation error displayed
 
 ---
 
-#### **Test 4: Incomplete Email Validation** ✅
+#### **Test 4: Incomplete Email Validation** 
 
 ```java
 @Test
@@ -346,11 +346,11 @@ void userSeesValidationMessageForIncompleteEmail() {
 2. Click subscribe
 3. Verify validation error
 
-**Expected Result:** ✅ Validation error displayed
+**Expected Result:**  Validation error displayed
 
 ---
 
-#### **Test 5: Email Without Domain Extension Validation** ✅
+#### **Test 5: Email Without Domain Extension Validation** 
 
 ```java
 @Test
@@ -369,7 +369,7 @@ void userSeesValidationMessageForEmailWithoutDomain() {
 2. Click subscribe
 3. Verify validation error
 
-**Expected Result:** ✅ Validation error displayed
+**Expected Result:** Validation error displayed
 
 ---
 
@@ -377,21 +377,21 @@ void userSeesValidationMessageForEmailWithoutDomain() {
 
 ```
 Test Suite: NewsletterSignUpTest
-├─ Test 1: userCanSubscribeWithValidEmail ..................... ✅ PASS (12s)
-├─ Test 2: userSeesValidationMessageForEmptyEmail ............. ✅ PASS (8s)
-├─ Test 3: userSeesValidationMessageForInvalidEmailFormat ..... ✅ PASS (9s)
-├─ Test 4: userSeesValidationMessageForIncompleteEmail ........ ✅ PASS (8s)
-└─ Test 5: userSeesValidationMessageForEmailWithoutDomain .... ✅ PASS (8s)
+├─ Test 1: userCanSubscribeWithValidEmail .....................  PASS (12s)
+├─ Test 2: userSeesValidationMessageForEmptyEmail ............. PASS (8s)
+├─ Test 3: userSeesValidationMessageForInvalidEmailFormat .....  PASS (9s)
+├─ Test 4: userSeesValidationMessageForIncompleteEmail ........  PASS (8s)
+└─ Test 5: userSeesValidationMessageForEmailWithoutDomain ....  PASS (8s)
 
 Total Tests: 5
-Passed: 5 ✅
+Passed: 5 
 Failed: 0
 Duration: ~45 seconds
 ```
 
 ---
 
-## 🔄 CI/CD Pipeline
+##  CI/CD Pipeline
 
 ### GitHub Actions Workflow
 
@@ -485,15 +485,15 @@ on:
 
 **Not triggered:**
 
-❌ Push to other branches (e.g., `bugfix/`, `research/`)  
-❌ Push to non-watched branches  
+ Push to other branches (e.g., `bugfix/`, `research/`)  
+ Push to non-watched branches  
 
 ### Notifications
 
 #### Slack Notification (if configured)
 
 ```
-✅ CI Success
+CI Success
 Repository: Introductiontoselenium
 Author: Zakaria Osman
 Source Branch: feature/validation
@@ -508,7 +508,7 @@ Workflow URL: github.com/.../actions/runs/12345
 #### Email Notification (if configured)
 
 ```
-Subject: ✅ CI Success #42: Introductiontoselenium
+Subject:  CI Success #42: Introductiontoselenium
 
 CI Success
 
@@ -533,7 +533,7 @@ Test Results
 
 ---
 
-## 🏗️ Project Components
+##  Project Components
 
 ### 1. Configuration Management
 
@@ -626,7 +626,7 @@ public abstract class BasePage {
 
 ---
 
-## 📄 Page Object Model
+##  Page Object Model
 
 Page Objects encapsulate web page interactions:
 
@@ -654,10 +654,10 @@ public class NewsletterPage extends BasePage {
 ```
 
 **Benefits:**
-✅ Maintainability: Change selectors in one place  
-✅ Readability: Clear method names  
-✅ Reusability: Use across multiple tests  
-✅ Separation: Tests don't know HTML details  
+ Maintainability: Change selectors in one place  
+ Readability: Clear method names  
+ Reusability: Use across multiple tests  
+ Separation: Tests don't know HTML details  
 
 ### Success Page Object
 
@@ -681,7 +681,7 @@ public class SuccessPage extends BasePage {
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 ### Maven Configuration
 
@@ -764,7 +764,7 @@ jobs:
 
 ---
 
-## 📊 Logging & Reporting
+##  Logging & Reporting
 
 ### Test Reports
 
@@ -806,7 +806,7 @@ mvn test -X
 
 ---
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -882,15 +882,15 @@ Connection refused / DNS lookup failed
 
 ---
 
-## ✨ Best Practices
+##  Best Practices
 
 ### 1. Test Naming
 
 Tests should clearly describe what they test:
 
-✅ `userCanSubscribeWithValidEmail()`  
-✅ `userSeesValidationMessageForEmptyEmail()`  
-❌ `test1()`, `testEmail()`  
+ `userCanSubscribeWithValidEmail()`  
+ `userSeesValidationMessageForEmptyEmail()`  
+ `test1()`, `testEmail()`  
 
 ### 2. Assertions
 
@@ -908,8 +908,8 @@ assertTrue(pageText.contains("thanks"));
 
 Use explicit waits, not Thread.sleep():
 
-✅ `wait.until(ExpectedConditions.visibilityOf(element));`  
-❌ `Thread.sleep(5000);`  
+ `wait.until(ExpectedConditions.visibilityOf(element));`  
+ `Thread.sleep(5000);`  
 
 ### 4. Page Objects
 
@@ -956,7 +956,7 @@ assertEquals("Expected email format", actualError);
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 - [Selenium Documentation](https://www.selenium.dev/documentation/)
 - [JUnit 5 User Guide](https://junit.org/junit5/docs/current/user-guide/)
@@ -966,7 +966,7 @@ assertEquals("Expected email format", actualError);
 
 ---
 
-## 📞 Support & Contact
+##  Support & Contact
 
 For questions or issues:
 1. Check **Troubleshooting** section
@@ -976,13 +976,13 @@ For questions or issues:
 
 ---
 
-## 📄 License
+## License
 
 This project is provided as an educational example for learning Selenium WebDriver automation testing.
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 Built with:
 - Selenium WebDriver for browser automation
