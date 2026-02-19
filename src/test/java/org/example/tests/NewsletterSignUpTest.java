@@ -1,51 +1,37 @@
 package org.example.tests;
 
-import java.time.Duration;
-
-import org.example.config.TestConfig;
-import org.example.driver.DriverFactory;
 import org.example.pages.NewsletterPage;
 import org.example.pages.SuccessPage;
-import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-class NewsletterSignUpTest {
+/**
+ * UI tests for the newsletter sign-up flow.
+ */
+class NewsletterSignUpTest extends BaseTest {
 
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private TestConfig config;
     private NewsletterPage newsletterPage;
 
+    /**
+     * Initializes the page object and navigates to the base URL.
+     */
     @BeforeEach
+    @Override
     void setUp() {
-        config = TestConfig.fromSystemProperties();
-        driver = new DriverFactory().createChromeDriver(config);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(config.getTimeoutSeconds()));
+        super.setUp();
         newsletterPage = new NewsletterPage(driver, wait);
         newsletterPage.setDelayMillis(config.getDelayMillis());
         newsletterPage.open(config.getBaseUrl());
     }
 
-    @AfterEach
-    void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
     /**
-     * Test Case: Successful Newsletter Subscription
-     * Verifies that a user can successfully subscribe to the newsletter with a valid email address.
-     * Expected: Success message is displayed containing "thanks" and the submitted email address.
+     * Verifies that a valid email address completes the sign-up successfully.
      */
     @Test
     void userCanSubscribeWithValidEmail() {
         System.out.println("[TEST] Valid Email Subscription Test");
-        String testEmail = "qa+selenium@example.com";
+        String testEmail = "qaselenium";
         
         try {
             newsletterPage.subscribeWithEmail(testEmail);
@@ -63,9 +49,7 @@ class NewsletterSignUpTest {
     }
 
     /**
-     * Test Case: Empty Email Validation
-     * Verifies that validation error is displayed when user attempts to submit without entering an email.
-     * Expected: HTML5 validation message appears preventing form submission.
+     * Verifies validation behavior when the email input is empty.
      */
     @Test
     void userSeesValidationMessageForEmptyEmail() {
@@ -88,9 +72,7 @@ class NewsletterSignUpTest {
     }
 
     /**
-     * Test Case: Invalid Email Format Validation
-     * Verifies that validation error is displayed when user enters an invalid email format (missing @ symbol).
-     * Expected: HTML5 validation message appears preventing form submission.
+     * Verifies validation behavior for an invalid email format.
      */
     @Test
     void userSeesValidationMessageForInvalidEmailFormat() {
@@ -114,9 +96,7 @@ class NewsletterSignUpTest {
     }
 
     /**
-     * Test Case: Incomplete Email Validation
-     * Verifies that validation error is displayed when user enters an incomplete email (e.g., "test@").
-     * Expected: HTML5 validation message appears preventing form submission.
+     * Verifies validation behavior for an incomplete email.
      */
     @Test
     void userSeesValidationMessageForIncompleteEmail() {
@@ -140,9 +120,7 @@ class NewsletterSignUpTest {
     }
 
     /**
-     * Test Case: Email Without Proper Domain Validation
-     * Verifies that validation error is displayed when user enters an email without a proper domain extension.
-     * Expected: HTML5 validation message appears preventing form submission.
+     * Verifies validation behavior for an email without a proper domain.
      */
     @Test
     void userSeesValidationMessageForEmailWithoutDomain() {
