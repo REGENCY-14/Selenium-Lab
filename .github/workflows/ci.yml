@@ -204,7 +204,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "❌ CI Failed\nRepository: ${{ github.repository }}\nTests Failed: ${{ steps.test_meta.outputs.tests_failed }}"
+              "text": "❌ CI Failed\nRepository: ${{ github.repository }}\nRepository URL: ${{ github.server_url }}/${{ github.repository }}\nAuthor: ${{ github.event.pull_request.user.login || github.actor }}\nSource Branch: ${{ github.head_ref || github.ref_name }}\nTarget Branch: ${{ github.base_ref || github.ref_name }}\nCommit Message: ${{ steps.test_meta.outputs.commit_message }}\nCommit SHA: ${{ steps.test_meta.outputs.commit_sha }}\nCommit Author: ${{ steps.test_meta.outputs.commit_author }}\nTests Passed: ${{ steps.test_meta.outputs.tests_passed }}\nTests Failed: ${{ steps.test_meta.outputs.tests_failed }}\nOverall Test Status: ${{ steps.test_meta.outputs.tests_status }}\nWorkflow Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nTimestamp: ${{ steps.test_meta.outputs.timestamp }}"
             }
 
       # Step 10: Send email notification on success
