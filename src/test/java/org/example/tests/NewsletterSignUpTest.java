@@ -34,16 +34,27 @@ class NewsletterSignUpTest extends BaseTest {
         String testEmail = "qaselenium";
         
         try {
+            System.out.println("Step 1: Entering email address: " + testEmail);
             newsletterPage.subscribeWithEmail(testEmail);
+            
+            System.out.println("Step 2: Waiting for success page to load");
             SuccessPage successPage = newsletterPage.waitForSuccess();
+            
+            System.out.println("Step 3: Retrieving success page text");
             String pageText = successPage.getHeadingText().toLowerCase();
             
+            System.out.println("Step 4: Verifying success message contains 'thanks'");
             assertTrue(pageText.contains("thanks"), "Success message should contain 'thanks'");
+            
+            System.out.println("Step 5: Verifying success message displays email: " + testEmail);
             assertTrue(pageText.contains(testEmail.toLowerCase()), "Success message should display the email: " + testEmail);
             
             System.out.println("✅ PASSED\n");
         } catch (AssertionError | Exception e) {
-            System.out.println("❌ FAILED: " + e.getMessage() + "\n");
+            System.out.println("❌ FAILED at test step.");
+            System.out.println("Error Type: " + e.getClass().getSimpleName());
+            System.out.println("Error Message: " + e.getMessage());
+            System.out.println("Test Email Used: " + testEmail + "\n");
             throw e;
         }
     }
@@ -56,17 +67,26 @@ class NewsletterSignUpTest extends BaseTest {
         System.out.println("[TEST] Empty Email Validation Test");
         
         try {
+            System.out.println("Step 1: Clicking subscribe button without email");
             newsletterPage.clickSubscribe();
+            
+            System.out.println("Step 2: Checking if validation message is displayed");
             boolean messageDisplayed = newsletterPage.isValidationMessageDisplayed();
+            
+            System.out.println("Step 3: Retrieving HTML5 validation message");
             String message = newsletterPage.getEmailInputValidationMessage();
             
+            System.out.println("Step 4: Verifying validation message exists");
+            System.out.println("Message Displayed: " + messageDisplayed + ", Message Text: " + message);
             // HTML5 validation prevents form submission
             assertTrue(messageDisplayed || !message.isEmpty(),
                        "Validation message should be displayed for empty email");
             
             System.out.println("✅ PASSED\n");
         } catch (AssertionError | Exception e) {
-            System.out.println("❌ FAILED: " + e.getMessage() + "\n");
+            System.out.println("❌ FAILED at test step.");
+            System.out.println("Error Type: " + e.getClass().getSimpleName());
+            System.out.println("Error Message: " + e.getMessage() + "\n");
             throw e;
         }
     }
@@ -77,20 +97,33 @@ class NewsletterSignUpTest extends BaseTest {
     @Test
     void userSeesValidationMessageForInvalidEmailFormat() {
         System.out.println("[TEST] Invalid Email Format Validation Test");
+        String invalidEmail = "123456789";
         
         try {
-            newsletterPage.enterEmail("123456789");
+            System.out.println("Step 1: Entering invalid email format: " + invalidEmail);
+            newsletterPage.enterEmail(invalidEmail);
+            
+            System.out.println("Step 2: Clicking subscribe button");
             newsletterPage.clickSubscribe();
+            
+            System.out.println("Step 3: Checking if validation message is displayed");
             boolean messageDisplayed = newsletterPage.isValidationMessageDisplayed();
+            
+            System.out.println("Step 4: Retrieving HTML5 validation message");
             String message = newsletterPage.getEmailInputValidationMessage();
             
+            System.out.println("Step 5: Verifying validation message exists");
+            System.out.println("Message Displayed: " + messageDisplayed + ", Message Text: " + message);
             // HTML5 validation prevents form submission
             assertTrue(messageDisplayed || !message.isEmpty(),
                        "Validation message should be displayed for invalid email format");
             
             System.out.println("✅ PASSED\n");
         } catch (AssertionError | Exception e) {
-            System.out.println("❌ FAILED: " + e.getMessage() + "\n");
+            System.out.println("❌ FAILED at test step.");
+            System.out.println("Error Type: " + e.getClass().getSimpleName());
+            System.out.println("Error Message: " + e.getMessage());
+            System.out.println("Email Tested: " + invalidEmail + "\n");
             throw e;
         }
     }
@@ -101,20 +134,33 @@ class NewsletterSignUpTest extends BaseTest {
     @Test
     void userSeesValidationMessageForIncompleteEmail() {
         System.out.println("[TEST] Incomplete Email Validation Test");
+        String incompleteEmail = "test@";
         
         try {
-            newsletterPage.enterEmail("test@");
+            System.out.println("Step 1: Entering incomplete email: " + incompleteEmail);
+            newsletterPage.enterEmail(incompleteEmail);
+            
+            System.out.println("Step 2: Clicking subscribe button");
             newsletterPage.clickSubscribe();
+            
+            System.out.println("Step 3: Checking if validation message is displayed");
             boolean messageDisplayed = newsletterPage.isValidationMessageDisplayed();
+            
+            System.out.println("Step 4: Retrieving HTML5 validation message");
             String message = newsletterPage.getEmailInputValidationMessage();
             
+            System.out.println("Step 5: Verifying validation message exists");
+            System.out.println("Message Displayed: " + messageDisplayed + ", Message Text: " + message);
             // HTML5 validation prevents form submission
             assertTrue(messageDisplayed || !message.isEmpty(),
                        "Validation message should be displayed for incomplete email");
             
             System.out.println("✅ PASSED\n");
         } catch (AssertionError | Exception e) {
-            System.out.println("❌ FAILED: " + e.getMessage() + "\n");
+            System.out.println("❌ FAILED at test step.");
+            System.out.println("Error Type: " + e.getClass().getSimpleName());
+            System.out.println("Error Message: " + e.getMessage());
+            System.out.println("Email Tested: " + incompleteEmail + "\n");
             throw e;
         }
     }
@@ -125,20 +171,33 @@ class NewsletterSignUpTest extends BaseTest {
     @Test
     void userSeesValidationMessageForEmailWithoutDomain() {
         System.out.println("[TEST] Email Without Domain Validation Test");
+        String emailWithoutDomain = "test@domain";
         
         try {
-            newsletterPage.enterEmail("test@domain");
+            System.out.println("Step 1: Entering email without proper domain: " + emailWithoutDomain);
+            newsletterPage.enterEmail(emailWithoutDomain);
+            
+            System.out.println("Step 2: Clicking subscribe button");
             newsletterPage.clickSubscribe();
+            
+            System.out.println("Step 3: Checking if validation message is displayed");
             boolean messageDisplayed = newsletterPage.isValidationMessageDisplayed();
+            
+            System.out.println("Step 4: Retrieving HTML5 validation message");
             String message = newsletterPage.getEmailInputValidationMessage();
             
+            System.out.println("Step 5: Verifying validation message exists");
+            System.out.println("Message Displayed: " + messageDisplayed + ", Message Text: " + message);
             // HTML5 validation prevents form submission
             assertTrue(messageDisplayed || !message.isEmpty(),
                        "Validation message should be displayed for email without proper domain");
             
             System.out.println("✅ PASSED\n");
         } catch (AssertionError | Exception e) {
-            System.out.println("❌ FAILED: " + e.getMessage() + "\n");
+            System.out.println("❌ FAILED at test step.");
+            System.out.println("Error Type: " + e.getClass().getSimpleName());
+            System.out.println("Error Message: " + e.getMessage());
+            System.out.println("Email Tested: " + emailWithoutDomain + "\n");
             throw e;
         }
     }
